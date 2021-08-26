@@ -1,12 +1,12 @@
 resource "aws_kms_key" "aws-kmscmk-ec2" {
-  description             = "Key for ph ec2/ebs"
-  key_usage               = "ENCRYPT_DECRYPT"
+  description              = "Key for ph ec2/ebs"
+  key_usage                = "ENCRYPT_DECRYPT"
   customer_master_key_spec = "SYMMETRIC_DEFAULT"
-  enable_key_rotation     = "true"
-  tags                    = {
-    Name                  = "aws-kmscmk-ec2"
+  enable_key_rotation      = "true"
+  tags = {
+    Name = "aws-kmscmk-ec2"
   }
-  policy                  = <<EOF
+  policy = <<EOF
 {
   "Id": "AMIEC2",
   "Version": "2012-10-17",
@@ -73,6 +73,6 @@ EOF
 }
 
 resource "aws_kms_alias" "aws-kmscmk-ec2-alias" {
-  name                    = "alias/aws-kmscmk-ec2"
-  target_key_id           = aws_kms_key.aws-kmscmk-ec2.key_id
+  name          = "alias/aws-kmscmk-ec2"
+  target_key_id = aws_kms_key.aws-kmscmk-ec2.key_id
 }

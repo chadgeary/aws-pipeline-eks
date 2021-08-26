@@ -25,7 +25,7 @@ resource "aws_subnet" "aws-private-subnet-A" {
   availability_zone = data.aws_availability_zones.aws-azs.names[var.aws_az]
   cidr_block        = var.private_subnet_A_cidr
   tags = {
-    Name = "${var.aws_prefix}-private-subnet-A-${random_string.aws-suffix.result}"
+    Name                                                                                     = "${var.aws_prefix}-private-subnet-A-${random_string.aws-suffix.result}"
     "kubernetes.io/cluster/${var.aws_prefix}-eks-cluster-${random_string.aws-suffix.result}" = "shared"
   }
   depends_on = [aws_nat_gateway.aws-natgwA]
@@ -36,7 +36,7 @@ resource "aws_subnet" "aws-private-subnet-B" {
   availability_zone = data.aws_availability_zones.aws-azs.names[var.aws_az + 1]
   cidr_block        = var.private_subnet_B_cidr
   tags = {
-    Name = "${var.aws_prefix}-private-subnet-B-${random_string.aws-suffix.result}"
+    Name                                                                                     = "${var.aws_prefix}-private-subnet-B-${random_string.aws-suffix.result}"
     "kubernetes.io/cluster/${var.aws_prefix}-eks-cluster-${random_string.aws-suffix.result}" = "shared"
   }
   depends_on = [aws_nat_gateway.aws-natgwB]

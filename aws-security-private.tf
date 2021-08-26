@@ -36,3 +36,13 @@ resource "aws_security_group_rule" "aws-sg-private-service-public" {
   protocol          = var.service_protocol
   cidr_blocks       = [var.public_subnet_A_cidr, var.public_subnet_B_cidr]
 }
+
+resource "aws_security_group_rule" "aws-sg-private-https-self" {
+  security_group_id        = aws_security_group.aws-sg-private.id
+  type                     = "ingress"
+  description              = "HTTPS IN FROM SELF"
+  from_port                = "443"
+  to_port                  = "443"
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.aws-sg-private.id
+}

@@ -68,3 +68,31 @@
       shell: |
           /opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json -s
 
+    - name: ec2-user kubectl directories
+      file:
+        path: "/home/ec2-user/{{ item }}"
+        state: directory
+        owner: ec2-user
+        group: ec2-user
+        mode: '0700'
+      loop:
+        - bin
+        - .kube
+
+    - name: kubectl versions and urls
+      set_fact:
+        cluster_version_urls:
+          "1.21": "https://amazon-eks.s3.us-west-2.amazonaws.com/1.21.2/2021-07-05/bin/linux/amd64/kubectl"
+          "1.20": "https://amazon-eks.s3.us-west-2.amazonaws.com/1.20.4/2021-04-12/bin/linux/amd64/kubectl"
+          "1.19": "https://amazon-eks.s3.us-west-2.amazonaws.com/1.19.6/2021-01-05/bin/linux/amd64/kubectl"
+          "1.18": "https://amazon-eks.s3.us-west-2.amazonaws.com/1.18.9/2020-11-02/bin/linux/amd64/kubectl"
+
+    - name: ec2-user kubectl download
+      get_url:
+        url: "{{ item.value }}"
+        dest: /home/ec2-user/bin/kubectl
+        owner: ec2-user
+        group: ec2-user
+        mode: '0500'
+      loop: "{{ lookup('dict', cluster_version_urls) }}"
+      when: cluster_version|string in item.key

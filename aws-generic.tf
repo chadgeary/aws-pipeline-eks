@@ -3,6 +3,12 @@ provider "aws" {
   profile = var.aws_profile
 }
 
+provider "aws" {
+  alias   = "aws-us-east-1"
+  region  = "us-east-1"
+  profile = var.aws_profile
+}
+
 variable "aws_prefix" {
   type = string
 }
@@ -13,6 +19,14 @@ variable "aws_profile" {
 
 variable "aws_region" {
   type = string
+}
+
+variable "domain" {
+  type = string
+}
+
+variable "create_root_a_record" {
+  type = bool
 }
 
 variable "kms_manager" {
@@ -89,33 +103,33 @@ variable "log_retention_days" {
 }
 
 variable "vendor_ami_account_number" {
-  type    = string
+  type = string
 }
 
 variable "vendor_ami_name_string" {
-  type    = string
+  type = string
 }
 
 variable "instance_vol_gb" {
-  type    = number
+  type = number
 }
 
 variable "instance_vol_type" {
-  type    = string
+  type = string
 }
 
 variable "instance_types" {
-  type    = list
+  type = list(any)
 }
 
 variable "minimum_node_count" {
-  type    = number
+  type = number
 }
 
 variable "maximum_node_count" {
-  type    = number
+  type = number
 }
 
 variable "instance_key" {
-  type    = string
+  type = string
 }

@@ -1,5 +1,5 @@
 data "aws_iam_policy" "aws-eks-cluster-policy-general" {
-  arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+  arn = "arn:${data.aws_partition.aws-partition.partition}:iam::aws:policy/AmazonEKSClusterPolicy"
 }
 
 resource "aws_iam_policy" "aws-eks-cluster-policy-kms" {
@@ -32,6 +32,25 @@ resource "aws_iam_policy" "aws-eks-cluster-policy-kms" {
 EOF
 }
 
+resource "aws_iam_policy" "aws-eks-cluster-policy-config" {
+  name   = "${var.aws_prefix}-eks-cluster-policy-config-${random_string.aws-suffix.result}"
+  policy = <<EOF
+{
+  "Statement": [
+    {
+      "Sid": "Config",
+      "Effect": "Allow",
+      "Action": [
+        "eks:AssociateIdentityProviderConfig"
+      ],
+      "Resource": ["arn:${data.aws_partition.aws-partition.partition}:eks:${var.aws_region}:${data.aws_caller_identity.aws-account.account_id}:cluster/${var.aws_prefix}-eks-cluster-${random_string.aws-suffix.result}"]
+    }
+  ],
+  "Version": "2012-10-17"
+}
+EOF
+}
+
 resource "aws_iam_role" "aws-eks-cluster-role" {
   name               = "${var.aws_prefix}-eks-cluster-role-${random_string.aws-suffix.result}"
   assume_role_policy = <<EOF
@@ -44,6 +63,22 @@ resource "aws_iam_role" "aws-eks-cluster-role" {
       "Action": "sts:AssumeRole",
       "Principal": {
         "Service": ["eks.amazonaws.com"]
+      }
+    },
+    {
+      "Sid": "Manager",
+      "Effect": "Allow",
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "AWS": ["${data.aws_iam_user.aws-kmsmanager.arn}"]
+      }
+    },
+    {
+      "Sid": "Account",
+      "Effect": "Allow",
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "AWS": ["${data.aws_caller_identity.aws-account.account_id}"]
       }
     }
   ]
@@ -59,4 +94,9 @@ resource "aws_iam_role_policy_attachment" "aws-eks-cluster-policy-attach-1" {
 resource "aws_iam_role_policy_attachment" "aws-eks-cluster-policy-attach-2" {
   role       = aws_iam_role.aws-eks-cluster-role.name
   policy_arn = aws_iam_policy.aws-eks-cluster-policy-kms.arn
+}
+
+resource "aws_iam_role_policy_attachment" "aws-eks-cluster-policy-attach-3" {
+  role       = aws_iam_role.aws-eks-cluster-role.name
+  policy_arn = aws_iam_policy.aws-eks-cluster-policy-config.arn
 }

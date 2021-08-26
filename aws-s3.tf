@@ -27,8 +27,8 @@ resource "aws_s3_bucket" "aws-s3-bucket" {
         "s3:*"
       ],
       "Resource": [
-        "arn:aws:s3:::${var.aws_prefix}-bucket-${random_string.aws-suffix.result}",
-        "arn:aws:s3:::${var.aws_prefix}-bucket-${random_string.aws-suffix.result}/*"
+        "arn:${data.aws_partition.aws-partition.partition}:s3:::${var.aws_prefix}-bucket-${random_string.aws-suffix.result}",
+        "arn:${data.aws_partition.aws-partition.partition}:s3:::${var.aws_prefix}-bucket-${random_string.aws-suffix.result}/*"
       ]
     },
     {
@@ -44,7 +44,7 @@ resource "aws_s3_bucket" "aws-s3-bucket" {
         "s3:PutObject",
         "s3:PutObjectACL"
       ],
-      "Resource": ["arn:aws:s3:::${var.aws_prefix}-bucket-${random_string.aws-suffix.result}","arn:aws:s3:::${var.aws_prefix}-bucket-${random_string.aws-suffix.result}/*"]
+      "Resource": ["arn:${data.aws_partition.aws-partition.partition}:s3:::${var.aws_prefix}-bucket-${random_string.aws-suffix.result}","arn:${data.aws_partition.aws-partition.partition}:s3:::${var.aws_prefix}-bucket-${random_string.aws-suffix.result}/*"]
     },
     {
       "Sid": "Codebuild",
@@ -59,7 +59,7 @@ resource "aws_s3_bucket" "aws-s3-bucket" {
         "s3:PutObject",
         "s3:PutObjectACL"
       ],
-      "Resource": ["arn:aws:s3:::${var.aws_prefix}-bucket-${random_string.aws-suffix.result}","arn:aws:s3:::${var.aws_prefix}-bucket-${random_string.aws-suffix.result}/*"]
+      "Resource": ["arn:${data.aws_partition.aws-partition.partition}:s3:::${var.aws_prefix}-bucket-${random_string.aws-suffix.result}","arn:${data.aws_partition.aws-partition.partition}:s3:::${var.aws_prefix}-bucket-${random_string.aws-suffix.result}/*"]
     },
     {
       "Sid": "EKSNodes",
@@ -75,7 +75,7 @@ resource "aws_s3_bucket" "aws-s3-bucket" {
         "s3:PutObjectACL",
         "s3:ListBucket"
       ],
-      "Resource": ["arn:aws:s3:::${var.aws_prefix}-bucket-${random_string.aws-suffix.result}","arn:aws:s3:::${var.aws_prefix}-bucket-${random_string.aws-suffix.result}/playbook","arn:aws:s3:::${var.aws_prefix}-bucket-${random_string.aws-suffix.result}/ssm"]
+      "Resource": ["arn:${data.aws_partition.aws-partition.partition}:s3:::${var.aws_prefix}-bucket-${random_string.aws-suffix.result}","arn:${data.aws_partition.aws-partition.partition}:s3:::${var.aws_prefix}-bucket-${random_string.aws-suffix.result}/playbook","arn:${data.aws_partition.aws-partition.partition}:s3:::${var.aws_prefix}-bucket-${random_string.aws-suffix.result}/ssm"]
     }
   ]
 }
