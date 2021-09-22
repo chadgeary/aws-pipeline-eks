@@ -54,7 +54,8 @@ resource "aws_iam_role" "aws-eks-efs-role" {
       },
       "Condition": {
         "StringEquals": {
-          "${substr(data.aws_eks_cluster.aws-eks-cluster.identity[0].oidc[0].issuer, 8, -1)}:sub": "system:serviceaccount:kube-system:efs-csi-controller-sa"
+          "${substr(data.aws_eks_cluster.aws-eks-cluster.identity[0].oidc[0].issuer, 8, -1)}:sub": "system:serviceaccount:kube-system:efs-csi-controller-sa",
+          "${substr(data.aws_eks_cluster.aws-eks-cluster.identity[0].oidc[0].issuer, 8, -1)}:aud": "sts.amazonaws.com"
         }
       }
     }

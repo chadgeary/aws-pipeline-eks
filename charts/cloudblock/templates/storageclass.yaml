@@ -9,7 +9,7 @@ parameters:
   fileSystemId: {{ .Values.efs.fsid }}
   directoryPerms: {{ quote .Values.efs.permissions }}
   gidRangeStart: "1000"
-  gidRangeEnd: "1000"
+  gidRangeEnd: "1001"
   basePath: {{ .Values.efs.pathpihole }}
 ---
 kind: StorageClass
@@ -21,6 +21,6 @@ parameters:
   provisioningMode: efs-ap
   fileSystemId: {{ .Values.efs.fsid }}
   directoryPerms: {{ quote .Values.efs.permissions }}
-  gidRangeStart: "1"
-  gidRangeEnd: "1000"
+  gidRangeStart: "1000"
+  gidRangeEnd: "1001"
   basePath: {{ .Values.efs.pathdnsmasq }}
