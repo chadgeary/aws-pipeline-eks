@@ -24,4 +24,6 @@ users:
       - get-token
       - --cluster-name
       - ${ cluster_name }
+      - --profile
+      - ${ aws_profile }
       command: aws

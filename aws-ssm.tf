@@ -95,7 +95,7 @@ resource "aws_ssm_association" "aws-ssm-assoc" {
     s3_key_prefix  = "ssm"
   }
   parameters = {
-    ExtraVariables = "SSM=True aws_prefix=${var.aws_prefix} aws_suffix=${random_string.aws-suffix.result} aws_region=${var.aws_region} cluster_version=${aws_eks_cluster.aws-eks-cluster.version}"
+    ExtraVariables = "SSM=True aws_prefix=${var.aws_prefix} aws_suffix=${random_string.aws-suffix.result} aws_region=${var.aws_region}"
     PlaybookFile   = "eks-node.yml"
     SourceInfo     = "{\"path\":\"https://s3.${var.aws_region}.amazonaws.com/${aws_s3_bucket.aws-s3-bucket.id}/playbook/\"}"
     SourceType     = "S3"

@@ -79,6 +79,7 @@ resource "local_file" "k8s-kubeconfig" {
     cluster_endpoint = data.aws_eks_cluster.aws-eks-cluster.endpoint,
     cluster_arn      = aws_eks_cluster.aws-eks-cluster.arn,
     cluster_region   = var.aws_region
+    aws_profile      = var.aws_profile
   })
   filename = "./kubeconfig-${var.aws_prefix}-${random_string.aws-suffix.result}"
 }
