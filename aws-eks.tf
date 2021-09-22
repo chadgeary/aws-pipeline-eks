@@ -16,7 +16,7 @@ resource "aws_eks_cluster" "aws-eks-cluster" {
   kubernetes_network_config {
     service_ipv4_cidr = var.kube_cidr
   }
-  depends_on = [aws_iam_role_policy_attachment.aws-eks-cluster-policy-attach-1, aws_iam_role_policy_attachment.aws-eks-cluster-policy-attach-2, aws_iam_role_policy_attachment.aws-eks-cluster-policy-attach-3, aws_cloudwatch_log_group.aws-cloudwatch-log-group-eks-cluster]
+  depends_on = [aws_iam_role_policy_attachment.aws-eks-cluster-policy-attach-1, aws_iam_role_policy_attachment.aws-eks-cluster-policy-attach-2, aws_iam_role_policy_attachment.aws-eks-cluster-policy-attach-3, aws_iam_role_policy_attachment.aws-eks-cluster-policy-attach-4, aws_cloudwatch_log_group.aws-cloudwatch-log-group-eks-cluster]
 }
 
 # Nodes assume IAM role
@@ -63,10 +63,39 @@ resource "aws_iam_role" "aws-eks-role-nodes" {
 #  oidc {
 #    client_id                     = aws_cognito_user_pool_client.cognito-up-client.id
 #    identity_provider_config_name = aws_cognito_identity_pool.cognito-ip.identity_pool_name
-#    issuer_url                    = "https://${var.aws_prefix}-${random_string.aws-suffix.result}.${var.domain}"
+#    issuer_url                    = "https://cognito-idp.${var.aws_region}.amazonaws.com/${aws_cognito_user_pool_client.cognito-up-client.user_pool_id}"
 #    groups_claim                  = "cognito:groups"
 #    groups_prefix                 = "oidc:"
 #    username_claim                = "cognito:username"
 #    username_prefix               = "oidc:"
 #  }
 #}
+
+# kubeconfig
+resource "local_file" "k8s-kubeconfig" {
+  sensitive_content = templatefile("aws-eks-kubeconfig.tpl", {
+    cluster_name     = aws_eks_cluster.aws-eks-cluster.name,
+    cluster_ca       = data.aws_eks_cluster.aws-eks-cluster.certificate_authority[0].data,
+    cluster_endpoint = data.aws_eks_cluster.aws-eks-cluster.endpoint,
+    cluster_arn      = aws_eks_cluster.aws-eks-cluster.arn,
+    cluster_region   = var.aws_region
+  })
+  filename = "./kubeconfig-${var.aws_prefix}-${random_string.aws-suffix.result}"
+}
+
+data "aws_eks_cluster" "aws-eks-cluster" {
+  name = aws_eks_cluster.aws-eks-cluster.name
+}
+
+# idp via eksctl
+resource "local_file" "k8s-idp" {
+  sensitive_content = templatefile("aws-eks-idp.tpl", {
+    cluster_name      = aws_eks_cluster.aws-eks-cluster.name,
+    cluster_region    = var.aws_region
+    cognito_name      = aws_cognito_identity_pool.cognito-ip.identity_pool_name
+    cognito_url       = "https://cognito-idp.${var.aws_region}.amazonaws.com/${aws_cognito_user_pool_client.cognito-up-client.user_pool_id}"
+    cognito_client_id = aws_cognito_user_pool_client.cognito-up-client.id
+  })
+  filename = "./idp-${var.aws_prefix}-${random_string.aws-suffix.result}"
+  file_permission = "0600"
+}

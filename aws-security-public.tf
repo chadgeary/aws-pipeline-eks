@@ -35,6 +35,9 @@ resource "aws_security_group_rule" "aws-sg-public-service-private" {
   to_port                  = var.service_port
   protocol                 = var.service_protocol
   source_security_group_id = aws_security_group.aws-sg-private.id
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_security_group_rule" "aws-sg-public-service-client" {
@@ -45,4 +48,7 @@ resource "aws_security_group_rule" "aws-sg-public-service-client" {
   to_port           = var.service_port
   protocol          = var.service_protocol
   cidr_blocks       = var.client_cidrs
+  lifecycle {
+    create_before_destroy = true
+  }
 }

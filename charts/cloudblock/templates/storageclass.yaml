@@ -1,0 +1,26 @@
+---
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: efs-sc-pihole
+provisioner: efs.csi.aws.com
+parameters:
+  provisioningMode: efs-ap
+  fileSystemId: {{ .Values.efs.fsid }}
+  directoryPerms: {{ quote .Values.efs.permissions }}
+  gidRangeStart: "1000"
+  gidRangeEnd: "1000"
+  basePath: {{ .Values.efs.pathpihole }}
+---
+kind: StorageClass
+apiVersion: storage.k8s.io/v1
+metadata:
+  name: efs-sc-dnsmasq
+provisioner: efs.csi.aws.com
+parameters:
+  provisioningMode: efs-ap
+  fileSystemId: {{ .Values.efs.fsid }}
+  directoryPerms: {{ quote .Values.efs.permissions }}
+  gidRangeStart: "1"
+  gidRangeEnd: "1000"
+  basePath: {{ .Values.efs.pathdnsmasq }}

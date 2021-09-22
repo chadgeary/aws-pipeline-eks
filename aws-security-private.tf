@@ -35,6 +35,9 @@ resource "aws_security_group_rule" "aws-sg-private-service-public" {
   to_port           = var.service_port
   protocol          = var.service_protocol
   cidr_blocks       = [var.public_subnet_A_cidr, var.public_subnet_B_cidr]
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "aws_security_group_rule" "aws-sg-private-https-self" {
@@ -43,6 +46,16 @@ resource "aws_security_group_rule" "aws-sg-private-https-self" {
   description              = "HTTPS IN FROM SELF"
   from_port                = "443"
   to_port                  = "443"
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.aws-sg-private.id
+}
+
+resource "aws_security_group_rule" "aws-sg-private-nfs-self" {
+  security_group_id        = aws_security_group.aws-sg-private.id
+  type                     = "ingress"
+  description              = "NFS IN FROM SELF"
+  from_port                = "2049"
+  to_port                  = "2049"
   protocol                 = "tcp"
   source_security_group_id = aws_security_group.aws-sg-private.id
 }

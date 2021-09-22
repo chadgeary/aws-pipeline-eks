@@ -4,4 +4,5 @@
 *pvars.*
 *.swp
 *.zip
-*kubeconfig.tpl
+kubeconfig*
+idp*
