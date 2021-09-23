@@ -82,6 +82,7 @@ resource "local_file" "k8s-kubeconfig" {
     aws_profile      = var.aws_profile
   })
   filename = "./kubeconfig-${var.aws_prefix}-${random_string.aws-suffix.result}"
+  file_permission = "0600"
 }
 
 data "aws_eks_cluster" "aws-eks-cluster" {

@@ -15,7 +15,7 @@ Terraform full stack CodePipe with EKS in AWS with self-managed EKS nodes, e.g. 
 # Edit variables
 # ensure aws_* and kms_* vars are set
 # ensure *_cidr vars do not overlap existing subnets
-# minimum_node_count must be 2 for AWS EFS to be happy
+# minimum_node_count must be 2 for AWS EFS to be happy, keep Interface/IPs per instance type in mind too.
 vi aws.tfvars
 
 # Initialize terraform
