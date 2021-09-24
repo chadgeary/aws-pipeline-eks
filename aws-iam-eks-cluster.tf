@@ -68,14 +68,6 @@ resource "aws_iam_role" "aws-eks-cluster-role" {
       "Principal": {
         "Service": ["eks.amazonaws.com"]
       }
-    },
-    {
-      "Sid": "Manager",
-      "Effect": "Allow",
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "AWS": ["arn:${data.aws_partition.aws-partition.partition}:iam::${data.aws_caller_identity.aws-account.account_id}:user/${var.kms_manager}"]
-      }
     }
   ]
 }

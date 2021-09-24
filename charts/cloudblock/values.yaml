@@ -19,11 +19,9 @@ fullnameOverride: ""
 #PIHOLE_DNS_: '1.1.1.1;8.8.8.8'
 #WEBPASSWORD: 'Change me please'
 
-envSecrets:
-  NAME: 'envsecrets'
+env:
   TZ: 'UTC'
   PIHOLE_DNS_: '1.1.1.1;8.8.8.8'
-  WEBPASSWORD: 'Change me please'
 
 serviceAccount:
   # Specifies whether a service account should be created

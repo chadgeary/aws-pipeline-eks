@@ -12,6 +12,9 @@ aws_profile = "default"
 # A non-root IAM user for managing/owning KMS keys
 kms_manager = "my_aws_username"
 
+# web password
+cloudblock_webpassword = "Please change me!"
+
 # Route53 domain if no A record exist for the domain, please set create_root_a_record to true
 domain               = "example.com"
 create_root_a_record = true
@@ -37,6 +40,10 @@ log_retention_days = 30
 # ami
 vendor_ami_account_number = "602401143452"
 vendor_ami_name_string    = "amazon-eks-node-1.20-v*"
+
+# The link-referenced image version run via DaemonSet that integrates AWS with Kubernetes' secrets-store-csi-driver, a.k.a "secrets-store-csi-driver-provider"
+# see: https://github.com/aws/secrets-store-csi-driver-provider-aws/blob/main/deployment/aws-provider-installer.yaml#L61
+aws_secrets_store_provider_image_version = "1.0.r2-2021.08.13.20.34-linux-amd64"
 
 # instances - keep in mind IP addressing limits per instance type (see below table)
 instance_types     = ["t3a.medium"]

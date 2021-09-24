@@ -133,3 +133,7 @@ variable "maximum_node_count" {
 variable "instance_key" {
   type = string
 }
+
+variable "cloudblock_webpassword" {
+  type = string
+}

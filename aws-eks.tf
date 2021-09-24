@@ -73,7 +73,7 @@ resource "aws_iam_role" "aws-eks-role-nodes" {
 
 # kubeconfig
 resource "local_file" "k8s-kubeconfig" {
-  sensitive_content = templatefile("aws-eks-kubeconfig.tpl", {
+  sensitive_content = templatefile("./templates/aws-eks-kubeconfig.tpl", {
     cluster_name     = aws_eks_cluster.aws-eks-cluster.name,
     cluster_ca       = data.aws_eks_cluster.aws-eks-cluster.certificate_authority[0].data,
     cluster_endpoint = data.aws_eks_cluster.aws-eks-cluster.endpoint,
@@ -81,7 +81,7 @@ resource "local_file" "k8s-kubeconfig" {
     cluster_region   = var.aws_region
     aws_profile      = var.aws_profile
   })
-  filename = "./kubeconfig-${var.aws_prefix}-${random_string.aws-suffix.result}"
+  filename        = "./kubeconfig-${var.aws_prefix}-${random_string.aws-suffix.result}"
   file_permission = "0600"
 }
 
@@ -91,13 +91,13 @@ data "aws_eks_cluster" "aws-eks-cluster" {
 
 # idp via eksctl
 resource "local_file" "k8s-idp" {
-  sensitive_content = templatefile("aws-eks-idp.tpl", {
+  sensitive_content = templatefile("./templates/aws-eks-idp.tpl", {
     cluster_name      = aws_eks_cluster.aws-eks-cluster.name,
     cluster_region    = var.aws_region
     cognito_name      = aws_cognito_identity_pool.cognito-ip.identity_pool_name
     cognito_url       = "https://cognito-idp.${var.aws_region}.amazonaws.com/${aws_cognito_user_pool_client.cognito-up-client.user_pool_id}"
     cognito_client_id = aws_cognito_user_pool_client.cognito-up-client.id
   })
-  filename = "./idp-${var.aws_prefix}-${random_string.aws-suffix.result}"
+  filename        = "./idp-${var.aws_prefix}-${random_string.aws-suffix.result}"
   file_permission = "0600"
 }

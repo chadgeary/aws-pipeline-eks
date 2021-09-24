@@ -27,6 +27,16 @@ resource "aws_security_group_rule" "aws-sg-private-udp-out" {
   cidr_blocks       = ["0.0.0.0/0"]
 }
 
+resource "aws_security_group_rule" "aws-sg-private-efs-out" {
+  security_group_id        = aws_security_group.aws-sg-private.id
+  type                     = "egress"
+  description              = "OUT TO EFS"
+  from_port                = "2049"
+  to_port                  = "2049"
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.aws-sg-efs.id
+}
+
 resource "aws_security_group_rule" "aws-sg-private-service-public" {
   security_group_id = aws_security_group.aws-sg-private.id
   type              = "ingress"
@@ -38,24 +48,4 @@ resource "aws_security_group_rule" "aws-sg-private-service-public" {
   lifecycle {
     create_before_destroy = true
   }
-}
-
-resource "aws_security_group_rule" "aws-sg-private-https-self" {
-  security_group_id        = aws_security_group.aws-sg-private.id
-  type                     = "ingress"
-  description              = "HTTPS IN FROM SELF"
-  from_port                = "443"
-  to_port                  = "443"
-  protocol                 = "tcp"
-  source_security_group_id = aws_security_group.aws-sg-private.id
-}
-
-resource "aws_security_group_rule" "aws-sg-private-nfs-self" {
-  security_group_id        = aws_security_group.aws-sg-private.id
-  type                     = "ingress"
-  description              = "NFS IN FROM SELF"
-  from_port                = "2049"
-  to_port                  = "2049"
-  protocol                 = "tcp"
-  source_security_group_id = aws_security_group.aws-sg-private.id
 }

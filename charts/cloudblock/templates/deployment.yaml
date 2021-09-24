@@ -33,9 +33,16 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          envFrom:
-            - secretRef:
-                name: {{ $.Values.envSecrets.NAME }}
+          env:
+            - name: TZ
+              value: {{ .Values.env.TZ }}
+            - name: PIHOLE_DNS_
+              value: {{ .Values.env.PIHOLE_DNS_ }}
+            - name: WEBPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: cloudblock-secrets
+                  key: WEBPASSWORD
           ports:
             - name: http
               containerPort: 80
@@ -55,6 +62,9 @@ spec:
               mountPath: /etc/pihole
             - name: efsdnsmasq
               mountPath: /etc/dnsmasq.d
+            - name: cloudblock-secrets
+              mountPath: "/mnt/secrets-store"
+              readOnly: true
       volumes:
         - name: efspihole
           persistentVolumeClaim:
@@ -62,6 +72,12 @@ spec:
         - name: efsdnsmasq
           persistentVolumeClaim:
             claimName: efsdnsmasq
+        - name: cloudblock-secrets
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "cloudblock-secrets"
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
