@@ -5,12 +5,15 @@ metadata:
 spec:
   provider: aws
   secretObjects:
-    - secretName: cloudblock-secrets           
+    - secretName: webpassword
       type: Opaque
+      labels:
+        provider: "csi-driver"
       data:
-      - objectName: WEBPASSWORD
-        key: password
+      - objectName: webpassword
+        key: webpassword
   parameters:
     objects: |
         - objectName: "/${aws_prefix}-cloudblock-${aws_suffix}/webpassword"
           objectType: "ssmparameter"
+          objectAlias: "webpassword"

@@ -5,6 +5,10 @@ resource "helm_release" "secrets-store-csi" {
   name       = "secrets-store-csi-driver"
   repository = "https://raw.githubusercontent.com/kubernetes-sigs/secrets-store-csi-driver/master/charts"
   chart      = "secrets-store-csi-driver"
+  set {
+    name  = "syncSecret.enabled"
+    value = "true"
+  }
 }
 
 resource "kubernetes_manifest" "serviceaccount_kube_system_csi_secrets_store_provider_aws" {

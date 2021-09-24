@@ -20,10 +20,8 @@ spec:
       labels:
         {{- include "cloudblock.selectorLabels" . | nindent 8 }}
     spec:
-      {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+        - name: cloudblock-secrets
       serviceAccountName: {{ include "cloudblock.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
@@ -41,8 +39,8 @@ spec:
             - name: WEBPASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: cloudblock-secrets
-                  key: WEBPASSWORD
+                  name: webpassword
+                  key: webpassword
           ports:
             - name: http
               containerPort: 80

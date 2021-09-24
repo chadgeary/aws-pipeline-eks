@@ -29,5 +29,5 @@ resource "helm_release" "cloudblock" {
     value = aws_iam_role.aws-k8s-cloudblock-role.arn
     type  = "string"
   }
-  depends_on = [local_file.cloudblock-secrets]
+  depends_on = [local_file.cloudblock-secrets, aws_ssm_parameter.cloudblock_webpassword]
 }
