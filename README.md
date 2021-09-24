@@ -5,9 +5,12 @@ Terraform full stack CodePipe with EKS in AWS with self-managed EKS nodes, e.g. 
 - CodePipe fetches via S3 and passes to CodeBuild
 - CodeBuild creates the container image and pushes to ECR (Container Repository)
 
+# Features
+- Encrypted (transit/rest) file store via AWS efs-csi-controller for dynamic APs
+- Encrypted (transit/rest) environment vars via secrets-store-csi-driver + aws provider for SSM parameters
+
 - TODO:
   - EKS pulls ECR and runs
-  - EFS via IRSA for dynamic EFS APs.
   - Cognito as an IDP for OIDC.
 
 # Instructions
@@ -37,4 +40,4 @@ terraform apply --var-file="aws.tfvars"
 - k8s-kubeapps.tf is the bitnami published kubeapps chart
 - k8s-efs-csi.tf is the aws published EFS driver chart
 - k8s-metrics.tf is the bitnami published metrics server chart
-- k8s-cloudblock.tf is the local chart in charts/cloudblock/ which is a proof of concept/tooling around for EFS. It'll probably mirror https://github.com/chadgeary/cloudblock
+- k8s-charts-cloudblock.tf is the local chart in charts/cloudblock/ which is a proof of concept/tooling around. It'll probably mirror https://github.com/chadgeary/cloudblock
