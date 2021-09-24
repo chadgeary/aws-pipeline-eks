@@ -36,8 +36,9 @@ terraform apply --var-file="aws.tfvars"
 - code-archive/ contains a rudimentary Dockerfile / buildspec.yml for CodeBuild to create+publish a container
 - playbook/ is an ansible playbook run on the EKS nodes (via AWS SSM) - mostly just configures cloudwatch metric publishing at this moment
 
-# Charts
-- k8s-kubeapps.tf is the bitnami published kubeapps chart
-- k8s-efs-csi.tf is the aws published EFS driver chart
-- k8s-metrics.tf is the bitnami published metrics server chart
-- k8s-charts-cloudblock.tf is the local chart in charts/cloudblock/ which is a proof of concept/tooling around. It'll probably mirror https://github.com/chadgeary/cloudblock
+# Helm / Charts
+- k8s-aws-efs-csi.tf is the AWS-maintained EFS driver
+- k8s-secrets-store.tf is the K8sSIG-maintained secrets driver + AWS-maintained provider/daemonset
+- k8s-kubeapps.tf is the bitnami-maintained kubeapps
+- k8s-metrics.tf is the bitnami-maintained metrics server
+- k8s-charts-cloudblock.tf is self-maintained in charts/cloudblock/, a proof of concept/tooling around for the other charts. Function-wise, it'll probably mirror https://github.com/chadgeary/cloudblock
