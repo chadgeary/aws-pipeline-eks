@@ -3,8 +3,8 @@ resource "helm_release" "secrets-store-csi" {
   wait       = true
   timeout    = 600
   name       = "secrets-store-csi-driver"
-  repository = "https://raw.githubusercontent.com/kubernetes-sigs/secrets-store-csi-driver/master/charts"
-  chart      = "secrets-store-csi-driver"
+  repository = "https://kubernetes-sigs.github.io/secrets-store-csi-driver/charts"
+  chart      = "csi-secrets-store"
   set {
     name  = "syncSecret.enabled"
     value = "true"
